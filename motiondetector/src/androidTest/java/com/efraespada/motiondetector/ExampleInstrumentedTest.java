@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.efraespada.sample.motiondetector", appContext.getPackageName());
+        assertEquals("com.efraespada.motiondetector.test", appContext.getPackageName());
     }
 }
