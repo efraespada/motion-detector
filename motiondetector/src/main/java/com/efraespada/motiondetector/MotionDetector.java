@@ -54,6 +54,10 @@ public class MotionDetector {
             motionService.setListener(context, listener, debug);
             context.bindService(i, getServiceConnection(motionService), Context.BIND_AUTO_CREATE);
             isServiceBound = true;
+        } else {
+            motionService.setListener(context, listener, debug);
+            motionService.stopService();
+            motionService.startService();
         }
     }
 
