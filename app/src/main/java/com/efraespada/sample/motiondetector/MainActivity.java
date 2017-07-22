@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageButton stepsReset;
 
     private static Integer count;
+    private static String currentType;
 
     private static float lastSpeed;
 
@@ -32,11 +33,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             count = 0;
         }
 
+        if (currentType == null) {
+            currentType = "not detected";
+        }
+
         speed = (TextView) findViewById(R.id.speed);
 
         acceleration = (TextView) findViewById(R.id.acceleration);
 
         type = (TextView) findViewById(R.id.type);
+        type.setText(currentType);
 
         steps = (TextView) findViewById(R.id.steps);
         steps.setText(String.valueOf(count));
@@ -68,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void type(String type) {
+                currentType = type;
                 MainActivity.this.type.setText(type);
             }
 

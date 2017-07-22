@@ -45,13 +45,14 @@ public class MotionService extends Service implements SensorEventListener {
     private static final String METRO =     "metro";
     private static final String PLANE =     "plane";
 
-    private static final String[] ORDER = new String[]{WALK, JOGGING, RUN, BIKE, CAR, MOTO, METRO, PLANE};
+    private static final String[] ORDER = new String[]{SIT, WALK, JOGGING, RUN, BIKE, CAR, MOTO, METRO, PLANE};
 
     private static Date lastTypeTime;
     private static final long maxInterval = 10 * 60 * 1000; // 10 min - millis
 
     private static String currentType;
 
+    private static Properties SIT_PROPERTIES;
     private static Properties WALK_PROPERTIES;
     private static Properties JOGGING_PROPERTIES;
     private static Properties RUN_PROPERTIES;
@@ -132,14 +133,15 @@ public class MotionService extends Service implements SensorEventListener {
         mAccelCurrent = SensorManager.GRAVITY_EARTH;
         mAccelLast = SensorManager.GRAVITY_EARTH;
 
-        WALK_PROPERTIES =       new Properties(1,   4.99f,      0,      1.38f,  1.2f);
+        SIT_PROPERTIES =        new Properties(0,   0.99f,      0,      1.38f,  1.4f);
+        WALK_PROPERTIES =       new Properties(1,   4.99f,      0,      1.38f,  1.4f);
         JOGGING_PROPERTIES =    new Properties(5,   9.99f,      0.55f,  2.77f,  1.85f);
         RUN_PROPERTIES =        new Properties(10,  19.99f,     1,      5.55f,  3.47f);
         BIKE_PROPERTIES =       new Properties(10,  29.99f,     1,      3.77f,  2.7f);
         CAR_PROPERTIES =        new Properties(10,  249.99f,    1,      12.77f, 2);
-        MOTO_PROPERTIES =       new Properties(10,  249.99f,    1,      12.77f, 1.3f);
-        METRO_PROPERTIES =      new Properties(10,  109,        1,      6.05f,  1.3f);
-        PLANE_PROPERTIES =      new Properties(20,  900,        1.8f,   3.5f,   1.3f);
+        MOTO_PROPERTIES =       new Properties(10,  249.99f,    1,      12.77f, 1.4f);
+        METRO_PROPERTIES =      new Properties(10,  109,        1,      6.05f,  1.4f);
+        PLANE_PROPERTIES =      new Properties(20,  900,        1.8f,   3.5f,   1.4f);
     }
 
     @Override
@@ -222,6 +224,11 @@ public class MotionService extends Service implements SensorEventListener {
 
             LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
             locationManager.requestLocationUpdates(getProviderName(), minTime, minDistance, locationListener);
+
+            if (currentLocation == null) {
+                currentLocation = locationManager.getLastKnownLocation(getProviderName());
+            }
+
             Handler handler = new Handler();
             Runnable runnable = new Runnable() {
                 @Override
@@ -264,7 +271,7 @@ public class MotionService extends Service implements SensorEventListener {
 
     private void checkAcceleration(float mAccel) {
         listener.accelerationChanged(mAccel);
-        if (Math.abs(mAccel) > 2) {
+        if (Math.abs(mAccel) > 0.3) {
             if (mAccel > 0 && isPositive) {
                 accelerationTimes++;
             } else if (mAccel > 0 && !isPositive) {
@@ -278,70 +285,88 @@ public class MotionService extends Service implements SensorEventListener {
                 accelerationTimes++;
             }
 
-            if (accelerationTimes > 5 && currentLocation != null) {
-                if (mAccel <= WALK_PROPERTIES.getMaxAcceleration() && mAccel > WALK_PROPERTIES.getMinAcceleration()
-                        && currentLocation.getSpeed() / 3.6f < WALK_PROPERTIES.getMaxSpeed() && currentLocation.getSpeed() / 3.6f > WALK_PROPERTIES.getMinSpeed()) {
+            if (accelerationTimes <= 5 && accelerationTimes > 1 && currentLocation != null) {
+                if (Math.abs(mAccel) <= SIT_PROPERTIES.getMaxAcceleration() && Math.abs(mAccel) > SIT_PROPERTIES.getMinAcceleration()
+                        && currentLocation.getSpeed() / 3.6f < SIT_PROPERTIES.getMaxSpeed() && currentLocation.getSpeed() / 3.6f >= SIT_PROPERTIES.getMinSpeed()) {
+
+                    if (priority(SIT)) {
+                        currentType = SIT;
+                        lastTypeTime = new Date();
+                        listener.type(currentType);
+                    }
+
+                }
+            } else if (accelerationTimes > 5 && currentLocation != null) {
+                if (Math.abs(mAccel) <= WALK_PROPERTIES.getMaxAcceleration() && Math.abs(mAccel) > WALK_PROPERTIES.getMinAcceleration()
+                        && currentLocation.getSpeed() / 3.6f < WALK_PROPERTIES.getMaxSpeed() && currentLocation.getSpeed() / 3.6f >= WALK_PROPERTIES.getMinSpeed()) {
 
                     if (priority(WALK)) {
                         currentType = WALK;
                         lastTypeTime = new Date();
+                        listener.type(currentType);
                     }
 
-                } else if (mAccel <= JOGGING_PROPERTIES.getMaxAcceleration() && mAccel > JOGGING_PROPERTIES.getMinAcceleration()
-                        && currentLocation.getSpeed() / 3.6f < JOGGING_PROPERTIES.getMaxSpeed() && currentLocation.getSpeed() / 3.6f > JOGGING_PROPERTIES.getMinSpeed()) {
+                } else if (Math.abs(mAccel) <= JOGGING_PROPERTIES.getMaxAcceleration() && Math.abs(mAccel) > JOGGING_PROPERTIES.getMinAcceleration()
+                        && currentLocation.getSpeed() / 3.6f < JOGGING_PROPERTIES.getMaxSpeed() && currentLocation.getSpeed() / 3.6f >= JOGGING_PROPERTIES.getMinSpeed()) {
 
                     if (priority(JOGGING)) {
                         currentType = JOGGING;
                         lastTypeTime = new Date();
+                        listener.type(currentType);
                     }
 
-                } else if (mAccel <= RUN_PROPERTIES.getMaxAcceleration() && mAccel > RUN_PROPERTIES.getMinAcceleration()
-                        && currentLocation.getSpeed() / 3.6f < RUN_PROPERTIES.getMaxSpeed() && currentLocation.getSpeed() / 3.6f > RUN_PROPERTIES.getMinSpeed()) {
+                } else if (Math.abs(mAccel) <= RUN_PROPERTIES.getMaxAcceleration() && Math.abs(mAccel) > RUN_PROPERTIES.getMinAcceleration()
+                        && currentLocation.getSpeed() / 3.6f < RUN_PROPERTIES.getMaxSpeed() && currentLocation.getSpeed() / 3.6f >= RUN_PROPERTIES.getMinSpeed()) {
 
                     if (priority(RUN)) {
                         currentType = RUN;
                         lastTypeTime = new Date();
+                        listener.type(currentType);
                     }
 
-                } else if (mAccel <= BIKE_PROPERTIES.getMaxAcceleration() && mAccel > BIKE_PROPERTIES.getMinAcceleration()
-                        && currentLocation.getSpeed() / 3.6f < BIKE_PROPERTIES.getMaxSpeed() && currentLocation.getSpeed() / 3.6f > BIKE_PROPERTIES.getMinSpeed()) {
+                } else if (Math.abs(mAccel) <= BIKE_PROPERTIES.getMaxAcceleration() && Math.abs(mAccel) > BIKE_PROPERTIES.getMinAcceleration()
+                        && currentLocation.getSpeed() / 3.6f < BIKE_PROPERTIES.getMaxSpeed() && currentLocation.getSpeed() / 3.6f >= BIKE_PROPERTIES.getMinSpeed()) {
 
                     if (priority(BIKE)) {
                         currentType = BIKE;
                         lastTypeTime = new Date();
+                        listener.type(currentType);
                     }
 
-                } else if (mAccel <= MOTO_PROPERTIES.getMaxAcceleration() && mAccel > MOTO_PROPERTIES.getMinAcceleration()
-                        && currentLocation.getSpeed() / 3.6f < MOTO_PROPERTIES.getMaxSpeed() && currentLocation.getSpeed() / 3.6f > MOTO_PROPERTIES.getMinSpeed()) {
+                } else if (Math.abs(mAccel) <= MOTO_PROPERTIES.getMaxAcceleration() && Math.abs(mAccel) > MOTO_PROPERTIES.getMinAcceleration()
+                        && currentLocation.getSpeed() / 3.6f < MOTO_PROPERTIES.getMaxSpeed() && currentLocation.getSpeed() / 3.6f >= MOTO_PROPERTIES.getMinSpeed()) {
 
                     if (priority(MOTO)) {
                         currentType = MOTO;
                         lastTypeTime = new Date();
+                        listener.type(currentType);
                     }
 
-                } else if (mAccel <= METRO_PROPERTIES.getMaxAcceleration() && mAccel > METRO_PROPERTIES.getMinAcceleration()
-                        && currentLocation.getSpeed() / 3.6f < METRO_PROPERTIES.getMaxSpeed() && currentLocation.getSpeed() / 3.6f > METRO_PROPERTIES.getMinSpeed()) {
+                } else if (Math.abs(mAccel) <= METRO_PROPERTIES.getMaxAcceleration() && Math.abs(mAccel) > METRO_PROPERTIES.getMinAcceleration()
+                        && currentLocation.getSpeed() / 3.6f < METRO_PROPERTIES.getMaxSpeed() && currentLocation.getSpeed() / 3.6f >= METRO_PROPERTIES.getMinSpeed()) {
 
                     if (priority(METRO)) {
                         currentType = METRO;
                         lastTypeTime = new Date();
+                        listener.type(currentType);
                     }
 
-                } else if (mAccel <= CAR_PROPERTIES.getMaxAcceleration() && mAccel > CAR_PROPERTIES.getMinAcceleration()
-                        && currentLocation.getSpeed() / 3.6f < CAR_PROPERTIES.getMaxSpeed() && currentLocation.getSpeed() / 3.6f > CAR_PROPERTIES.getMinSpeed()) {
+                } else if (Math.abs(mAccel) <= CAR_PROPERTIES.getMaxAcceleration() && Math.abs(mAccel) > CAR_PROPERTIES.getMinAcceleration()
+                        && currentLocation.getSpeed() / 3.6f < CAR_PROPERTIES.getMaxSpeed() && currentLocation.getSpeed() / 3.6f >= CAR_PROPERTIES.getMinSpeed()) {
 
                     if (priority(CAR)) {
                         currentType = CAR;
                         lastTypeTime = new Date();
+                        listener.type(currentType);
                     }
 
-                } else if (mAccel <= PLANE_PROPERTIES.getMaxAcceleration() && mAccel > PLANE_PROPERTIES.getMinAcceleration()
-                        && currentLocation.getSpeed() / 3.6f < PLANE_PROPERTIES.getMaxSpeed() && currentLocation.getSpeed() / 3.6f > PLANE_PROPERTIES.getMinSpeed()) {
+                } else if (Math.abs(mAccel) <= PLANE_PROPERTIES.getMaxAcceleration() && Math.abs(mAccel) > PLANE_PROPERTIES.getMinAcceleration()
+                        && currentLocation.getSpeed() / 3.6f < PLANE_PROPERTIES.getMaxSpeed() && currentLocation.getSpeed() / 3.6f >= PLANE_PROPERTIES.getMinSpeed()) {
 
                     if (priority(PLANE)) {
                         currentType = PLANE;
                         lastTypeTime = new Date();
-
+                        listener.type(currentType);
                     }
 
                 }
@@ -350,6 +375,10 @@ public class MotionService extends Service implements SensorEventListener {
     }
 
     private static boolean priority(String value) {
+        if (currentType == null) {
+            return true;
+        }
+
         if (value.equals(currentType)) {
             return true;
         }
