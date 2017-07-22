@@ -11,13 +11,18 @@ MotionDetector.start(new Listener() {
     }
     
     @Override
+    public void accelerationChanged(float acceleration) {
+    
+    }
+    
+    @Override
     public void step() {
         
     }
     
     @Override
-    public void car() {
-
+    public void type(String type) {
+    
     }
 });
 ```
