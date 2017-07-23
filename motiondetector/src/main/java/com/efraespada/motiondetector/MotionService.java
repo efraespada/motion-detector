@@ -271,13 +271,15 @@ public class MotionService extends Service implements SensorEventListener {
 
     private void checkAcceleration(float mAccel) {
         listener.accelerationChanged(mAccel);
-        if (Math.abs(mAccel) > 0.3) {
+        if (Math.abs(mAccel) > 0.01) {
             if (mAccel > 0 && isPositive) {
                 accelerationTimes++;
             } else if (mAccel > 0 && !isPositive) {
                 isPositive = true;
                 accelerationTimes = 0;
-                listener.step();
+                if (mAccel > 0.9) {
+                    listener.step();
+                }
             } else if (mAccel < 0 && isPositive) {
                 isPositive = false;
                 accelerationTimes = 0;
@@ -285,7 +287,7 @@ public class MotionService extends Service implements SensorEventListener {
                 accelerationTimes++;
             }
 
-            if (accelerationTimes <= 5 && accelerationTimes > 1 && currentLocation != null) {
+            if (accelerationTimes <= 5 && accelerationTimes > 0 && currentLocation != null) {
                 if (Math.abs(mAccel) <= SIT_PROPERTIES.getMaxAcceleration() && Math.abs(mAccel) > SIT_PROPERTIES.getMinAcceleration()
                         && currentLocation.getSpeed() / 3.6f < SIT_PROPERTIES.getMaxSpeed() && currentLocation.getSpeed() / 3.6f >= SIT_PROPERTIES.getMinSpeed()) {
 
@@ -375,6 +377,10 @@ public class MotionService extends Service implements SensorEventListener {
     }
 
     private static boolean priority(String value) {
+        if (lastTypeTime != null && lastTypeTime.getTime() > maxInterval) {
+            return true;
+        }
+
         if (currentType == null) {
             return true;
         }
