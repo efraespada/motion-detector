@@ -4,7 +4,6 @@ import android.location.Location;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -14,8 +13,12 @@ import com.efraespada.motiondetector.MotionDetector;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static final String ms = " m/s2";
+    private static final String kmh = " km/h";
     private TextView speed;
     private TextView acceleration;
+    private TextView accelerationMax;
+    private ImageButton accelerationReset;
     private TextView type;
     private TextView steps;
     private ImageButton stepsReset;
@@ -24,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static String currentType;
 
     private static float lastSpeed;
+    private static float maxAcceleration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +46,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         speed = (TextView) findViewById(R.id.speed);
+        speed.setText(String.valueOf(lastSpeed) + kmh);
 
         acceleration = (TextView) findViewById(R.id.acceleration);
+        accelerationMax = (TextView) findViewById(R.id.acceleration_max);
+        accelerationMax.setText(String.valueOf(maxAcceleration) + ms);
+
+        accelerationReset = (ImageButton) findViewById(R.id.acceleration_reset);
+        accelerationReset.setOnClickListener(this);
 
         type = (TextView) findViewById(R.id.type);
         type.setText(currentType);
@@ -62,12 +72,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void locationChanged(Location location) {
                 lastSpeed = location.getSpeed() * 3.6F;
-                speed.setText(String.valueOf(lastSpeed));
+                speed.setText(String.valueOf(lastSpeed) + kmh);
             }
 
             @Override
             public void accelerationChanged(float acceleration) {
-                MainActivity.this.acceleration.setText(String.valueOf(acceleration));
+                if (maxAcceleration < acceleration) {
+                    maxAcceleration = acceleration;
+                    MainActivity.this.accelerationMax.setText(String.valueOf(maxAcceleration) + ms);
+
+                }
+                MainActivity.this.acceleration.setText(String.valueOf(acceleration) + ms);
             }
 
             @Override
@@ -92,6 +107,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.steps_reset:
                 count = 0;
                 steps.setText(String.valueOf(count));
+                break;
+
+            case R.id.acceleration_reset:
+                maxAcceleration = 0.0f;
+                accelerationMax.setText(String.valueOf(maxAcceleration) + ms);
                 break;
 
             default:
