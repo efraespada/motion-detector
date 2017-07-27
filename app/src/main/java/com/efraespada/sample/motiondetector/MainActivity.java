@@ -1,6 +1,7 @@
 package com.efraespada.sample.motiondetector;
 
 import android.location.Location;
+import android.support.v4.view.LayoutInflaterCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -10,8 +11,25 @@ import android.widget.TextView;
 
 import com.efraespada.motiondetector.Listener;
 import com.efraespada.motiondetector.MotionDetector;
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.Iconics;
+import com.mikepenz.iconics.context.IconicsLayoutInflater;
+import com.mikepenz.iconics.view.IconicsTextView;
+import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic;
+
+import static com.efraespada.motiondetector.MotionService.BIKE;
+import static com.efraespada.motiondetector.MotionService.CAR;
+import static com.efraespada.motiondetector.MotionService.JOGGING;
+import static com.efraespada.motiondetector.MotionService.METRO;
+import static com.efraespada.motiondetector.MotionService.MOTO;
+import static com.efraespada.motiondetector.MotionService.PLANE;
+import static com.efraespada.motiondetector.MotionService.RUN;
+import static com.efraespada.motiondetector.MotionService.SIT;
+import static com.efraespada.motiondetector.MotionService.WALK;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
 
     private static final String ms = " m/s2";
     private static final String kmh = " km/h";
@@ -19,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView acceleration;
     private TextView accelerationMax;
     private ImageButton accelerationReset;
-    private TextView type;
+    private IconicsTextView type;
     private TextView steps;
     private ImageButton stepsReset;
 
@@ -31,6 +49,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        LayoutInflaterCompat.setFactory(getLayoutInflater(), new IconicsLayoutInflater(getDelegate()));
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -55,8 +75,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         accelerationReset = (ImageButton) findViewById(R.id.acceleration_reset);
         accelerationReset.setOnClickListener(this);
 
-        type = (TextView) findViewById(R.id.type);
-        type.setText(currentType);
+        type = (IconicsTextView) findViewById(R.id.type);
+        printIcon(currentType);
 
         steps = (TextView) findViewById(R.id.steps);
         steps.setText(String.valueOf(count));
@@ -94,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void type(String type) {
                 currentType = type;
-                MainActivity.this.type.setText(type);
+                MainActivity.this.printIcon(type);
             }
 
         });
@@ -118,5 +138,50 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // nothing to do here
                 break;
         }
+    }
+
+    private void printIcon(String value) {
+        switch (value) {
+
+            case SIT:
+                break;
+
+            case WALK:
+
+                break;
+
+            case JOGGING:
+                type.setText(MaterialDesignIconic.Icon.gmi_bike.getFormattedName());
+                break;
+
+            case RUN:
+                type.setText(MaterialDesignIconic.Icon.gmi_run.getFormattedName());
+                break;
+
+            case BIKE:
+                type.setText(MaterialDesignIconic.Icon.gmi_bike.getFormattedName());
+                break;
+
+            case METRO:
+                type.setText(MaterialDesignIconic.Icon.gmi_subway.getFormattedName());
+                break;
+
+            case CAR:
+                type.setText(MaterialDesignIconic.Icon.gmi_car.getFormattedName());
+                break;
+
+            case MOTO:
+                type.setText(CommunityMaterial.Icon.cmd_motorbike.getFormattedName());
+                break;
+
+            case PLANE:
+                type.setText(MaterialDesignIconic.Icon.gmi_airplane.getFormattedName());
+                break;
+
+            default:
+                type.setText(GoogleMaterial.Icon.gmd_local_pizza.getFormattedName());
+                break;
+        }
+
     }
 }
