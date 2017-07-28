@@ -276,7 +276,7 @@ public class MotionService extends Service implements SensorEventListener {
             } else if (mAccel > 0 && !isPositive) {
                 isPositive = true;
                 accelerationTimes = 0;
-                if (mAccel > 1.9 && currentLocation != null && (currentLocation.getSpeed() * 3.6f) <= RUN_PROPERTIES.getMaxSpeed() ) {
+                if (mAccel > 0.8 && currentLocation != null && (currentLocation.getSpeed() * 3.6f) <= RUN_PROPERTIES.getMaxSpeed() ) {
                     listener.step();
                 }
             } else if (mAccel < 0 && isPositive) {
