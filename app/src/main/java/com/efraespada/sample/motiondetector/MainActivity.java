@@ -144,22 +144,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (value) {
 
             case SIT:
+                type.setText(CommunityMaterial.Icon.cmd_seat_legroom_normal.getFormattedName());
                 break;
 
             case WALK:
-
+                type.setText(MaterialDesignIconic.Icon.gmi_directions_walk.getFormattedName());
                 break;
 
             case JOGGING:
-                type.setText(MaterialDesignIconic.Icon.gmi_bike.getFormattedName());
+                type.setText(MaterialDesignIconic.Icon.gmi_directions_run.getFormattedName());
                 break;
 
             case RUN:
-                type.setText(MaterialDesignIconic.Icon.gmi_run.getFormattedName());
+                type.setText(CommunityMaterial.Icon.cmd_run_fast.getFormattedName());
                 break;
 
             case BIKE:
-                type.setText(MaterialDesignIconic.Icon.gmi_bike.getFormattedName());
+                type.setText(MaterialDesignIconic.Icon.gmi_directions_bike.getFormattedName());
                 break;
 
             case METRO:

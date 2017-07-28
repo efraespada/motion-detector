@@ -138,7 +138,7 @@ public class MotionService extends Service implements SensorEventListener {
         RUN_PROPERTIES =        new Properties(10,  19.99f,     7,  8,  3.47f);
         BIKE_PROPERTIES =       new Properties(10,  29.99f,     8,  9,  2.7f);
         CAR_PROPERTIES =        new Properties(10,  249.99f,    9, 15,  2);
-        MOTO_PROPERTIES =       new Properties(10,  249.99f,    16, 20,  1.4f);
+        MOTO_PROPERTIES =       new Properties(10,  249.99f,    18, 23,  1.4f);
         METRO_PROPERTIES =      new Properties(10,  50,        2,  4,  1.4f);
         PLANE_PROPERTIES =      new Properties(20,  900,        15, 30,  1.4f);
     }
