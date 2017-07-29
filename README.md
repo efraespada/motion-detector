@@ -21,16 +21,25 @@ MotionDetector.start(new Listener() {
     
     }
     
+    /**
+    * acceleration changed 
+    */
     @Override
     public void accelerationChanged(float acceleration) {
     
     }
     
+    /**
+    * step detected
+    */
     @Override
     public void step() {
         
     }
     
+    /**
+    * 
+    */
     @Override
     public void type(String type) {
     

@@ -4,6 +4,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.location.Location;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -36,6 +37,7 @@ public class MotionDetector {
 
     public static void end() {
         if (isServiceBound != null && isServiceBound && motionService != null && motionService.getServiceConnection() != null) {
+            motionService.stopService();
             try {
                 context.unbindService(motionService.getServiceConnection());
             } catch (IllegalArgumentException e) {}
@@ -77,6 +79,18 @@ public class MotionDetector {
             }
         };
         return null;
+    }
+
+    public static Location getLocation() {
+        return motionService.getLocation();
+    }
+
+    public static String getType() {
+        return motionService.getType();
+    }
+
+    public static boolean isServiceReady() {
+        return motionService != null;
     }
 
 }

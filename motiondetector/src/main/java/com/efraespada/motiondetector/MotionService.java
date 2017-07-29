@@ -61,6 +61,8 @@ public class MotionService extends Service implements SensorEventListener {
     private static Properties METRO_PROPERTIES;
     private static Properties PLANE_PROPERTIES;
 
+    private static LocationManager locationManager;
+
     private static SensorManager sensorMan;
     private static Sensor accelerometer;
     private static Listener listener;
@@ -221,7 +223,7 @@ public class MotionService extends Service implements SensorEventListener {
                 return;
             }
 
-            LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+            locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
             locationManager.requestLocationUpdates(getProviderName(), minTime, minDistance, locationListener);
 
             if (currentLocation == null) {
@@ -392,15 +394,20 @@ public class MotionService extends Service implements SensorEventListener {
     }
 
     private static boolean priority(String value) {
-        if (lastTypeTime != null && (lastTypeTime.getTime() - (new Date().getTime())) >= maxInterval) {
-            return true;
-        }
-
         if (currentType == null) {
             return true;
         }
 
         if (value.equals(currentType)) {
+            return true;
+        }
+
+        if ((SIT.equals(currentType) || WALK.equals(currentType) || JOGGING.equals(currentType) || RUN.equals(currentType))
+                && (SIT.equals(value) || WALK.equals(value) || JOGGING.equals(value) || RUN.equals(value))) {
+            return true;
+        }
+
+        if (lastTypeTime != null && (lastTypeTime.getTime() - (new Date().getTime())) >= maxInterval) {
             return true;
         }
 
@@ -413,6 +420,14 @@ public class MotionService extends Service implements SensorEventListener {
         }
 
         return true;
+    }
+
+    public Location getLocation() throws SecurityException {
+        return locationManager.getLastKnownLocation(getProviderName());
+    }
+
+    public String getType() {
+        return currentType;
     }
 
     class Properties {

@@ -120,6 +120,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if (MotionDetector.isServiceReady()) {
+            lastSpeed = MotionDetector.getLocation().getSpeed() * 3.6F;
+            speed.setText(String.valueOf(lastSpeed) + kmh);
+            printIcon(MotionDetector.getType());
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MotionDetector.end();
+    }
+
+    @Override
     public void onClick(View view) {
         switch (view.getId()) {
 
