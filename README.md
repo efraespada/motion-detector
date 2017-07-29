@@ -50,3 +50,19 @@ MotionDetector.start(new Listener() {
 ```java
 MotionDetector.end();
 ```
+```java
+@Override
+protected void onResume() {
+    super.onResume();
+    if (MotionDetector.isServiceReady()) {
+        // service is ready
+    }
+}
+```
+```java
+@Override
+protected void onDestroy() {
+    MotionDetector.end();
+    super.onDestroy();
+}
+```
