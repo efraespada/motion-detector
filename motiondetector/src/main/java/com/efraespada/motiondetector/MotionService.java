@@ -132,15 +132,15 @@ public class MotionService extends Service implements SensorEventListener {
         mAccelCurrent = SensorManager.GRAVITY_EARTH;
         mAccelLast = SensorManager.GRAVITY_EARTH;
 
-        SIT_PROPERTIES =        new Properties(0,   0.99f,      1,  2,  1.4f);
-        WALK_PROPERTIES =       new Properties(1,   4.99f,      3,  4,  1.4f);
-        JOGGING_PROPERTIES =    new Properties(5,   9.99f,      5,  6,  1.85f);
-        RUN_PROPERTIES =        new Properties(10,  19.99f,     7,  8,  3.47f);
-        BIKE_PROPERTIES =       new Properties(10,  29.99f,     8,  9,  2.7f);
-        CAR_PROPERTIES =        new Properties(10,  249.99f,    9,  15,  2);
-        MOTO_PROPERTIES =       new Properties(10,  249.99f,    18, 23,  1.4f);
-        METRO_PROPERTIES =      new Properties(10,  50,         2,  4,  1.4f);
-        PLANE_PROPERTIES =      new Properties(150,  1200,      60, 70,  1.4f);
+        SIT_PROPERTIES =        new Properties(0,       0.5f,       1,  2,  1.4f);
+        WALK_PROPERTIES =       new Properties(0.5001f, 4.99f,      3,  4,  1.4f);
+        JOGGING_PROPERTIES =    new Properties(5,       9.99f,      5,  6,  1.85f);
+        RUN_PROPERTIES =        new Properties(10,      19.99f,     7,  8,  3.47f);
+        BIKE_PROPERTIES =       new Properties(10,      29.99f,     8,  9,  2.7f);
+        CAR_PROPERTIES =        new Properties(10,      249.99f,    9,  15,  2);
+        MOTO_PROPERTIES =       new Properties(10,      249.99f,    18, 23,  1.4f);
+        METRO_PROPERTIES =      new Properties(10,      50,         2,  4,  1.4f);
+        PLANE_PROPERTIES =      new Properties(150,     1200,       60, 70,  1.4f);
     }
 
     @Override
@@ -276,7 +276,7 @@ public class MotionService extends Service implements SensorEventListener {
             } else if (mAccel > 0 && !isPositive) {
                 isPositive = true;
                 accelerationTimes = 0;
-                if (mAccel > 0.5s && currentLocation != null && (currentLocation.getSpeed() * 3.6f) <= RUN_PROPERTIES.getMaxSpeed() ) {
+                if (mAccel > 0.5 && currentLocation != null && (currentLocation.getSpeed() * 3.6f) <= RUN_PROPERTIES.getMaxSpeed() ) {
                     listener.step();
                 }
             } else if (mAccel < 0 && isPositive) {
