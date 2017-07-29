@@ -7,7 +7,13 @@
 
 ```java
 MotionDetector.initialize(getApplicationContext());
+```
+
+```java
 MotionDetector.debug(true);
+```
+
+```java
 
 MotionDetector.start(new Listener() {
     @Override
@@ -30,4 +36,8 @@ MotionDetector.start(new Listener() {
     
     }
 });
+```
+
+```java
+MotionDetector.end();
 ```
