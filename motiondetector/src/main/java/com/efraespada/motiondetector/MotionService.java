@@ -47,7 +47,7 @@ public class MotionService extends Service implements SensorEventListener {
     private static final String[] ORDER = new String[]{SIT, WALK, JOGGING, RUN, BIKE, METRO, CAR, MOTO, PLANE};
 
     private static Date lastTypeTime;
-    private static final long maxInterval = 10 * 60 * 1000; // 10 min - millis
+    private static final long maxInterval = 5 * 60 * 1000; // 5 min - millis
 
     private static String currentType;
 
@@ -137,10 +137,10 @@ public class MotionService extends Service implements SensorEventListener {
         JOGGING_PROPERTIES =    new Properties(5,   9.99f,      5,  6,  1.85f);
         RUN_PROPERTIES =        new Properties(10,  19.99f,     7,  8,  3.47f);
         BIKE_PROPERTIES =       new Properties(10,  29.99f,     8,  9,  2.7f);
-        CAR_PROPERTIES =        new Properties(10,  249.99f,    9, 15,  2);
+        CAR_PROPERTIES =        new Properties(10,  249.99f,    9,  15,  2);
         MOTO_PROPERTIES =       new Properties(10,  249.99f,    18, 23,  1.4f);
-        METRO_PROPERTIES =      new Properties(10,  50,        2,  4,  1.4f);
-        PLANE_PROPERTIES =      new Properties(20,  900,        15, 30,  1.4f);
+        METRO_PROPERTIES =      new Properties(10,  50,         2,  4,  1.4f);
+        PLANE_PROPERTIES =      new Properties(150,  1200,      60, 70,  1.4f);
     }
 
     @Override
@@ -276,7 +276,7 @@ public class MotionService extends Service implements SensorEventListener {
             } else if (mAccel > 0 && !isPositive) {
                 isPositive = true;
                 accelerationTimes = 0;
-                if (mAccel > 0.8 && currentLocation != null && (currentLocation.getSpeed() * 3.6f) <= RUN_PROPERTIES.getMaxSpeed() ) {
+                if (mAccel > 0.5s && currentLocation != null && (currentLocation.getSpeed() * 3.6f) <= RUN_PROPERTIES.getMaxSpeed() ) {
                     listener.step();
                 }
             } else if (mAccel < 0 && isPositive) {

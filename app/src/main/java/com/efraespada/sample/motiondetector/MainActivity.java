@@ -13,7 +13,6 @@ import com.efraespada.motiondetector.Listener;
 import com.efraespada.motiondetector.MotionDetector;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.mikepenz.iconics.Iconics;
 import com.mikepenz.iconics.context.IconicsLayoutInflater;
 import com.mikepenz.iconics.view.IconicsTextView;
 import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic;
@@ -144,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (value) {
 
             case SIT:
-                type.setText(CommunityMaterial.Icon.cmd_seat_legroom_normal.getFormattedName());
+                type.setText(CommunityMaterial.Icon.cmd_seat_recline_normal.getFormattedName());
                 break;
 
             case WALK:
