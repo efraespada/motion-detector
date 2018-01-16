@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.efraespada.sample.motiondetector">
 
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
     <application
         android:allowBackup="true"
@@ -18,13 +18,14 @@
             android:enabled="true"
             android:exported="false" />
 
-        <activity android:name="com.efraespada.sample.motiondetector.MainActivity">
+        <activity android:name="com.efraespada.sample.motiondetector.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="com.efraespada.sample.motiondetector.MainActivity" />
     </application>
 
 </manifest>

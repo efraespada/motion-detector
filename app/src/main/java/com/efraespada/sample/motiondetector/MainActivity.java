@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         stepsReset = (ImageButton) findViewById(R.id.steps_reset);
         stepsReset.setOnClickListener(this);
 
-        MotionDetector.initialize(getApplicationContext());
+        MotionDetector.initialize(this);
         MotionDetector.debug(true);
 
         MotionDetector.start(new Listener() {

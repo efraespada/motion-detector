@@ -19,10 +19,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.Date;
+import java.util.Locale;
 
 import static android.location.LocationProvider.AVAILABLE;
 
@@ -34,15 +37,15 @@ public class MotionService extends Service implements SensorEventListener {
 
     private static final String TAG = MotionService.class.getSimpleName();
 
-    public static final String SIT =       "sit";
-    public static final String WALK =      "walking";
-    public static final String JOGGING =   "jogging";
-    public static final String RUN =       "running";
-    public static final String BIKE =      "biking";
-    public static final String CAR =       "car";
-    public static final String MOTO =      "moto";
-    public static final String METRO =     "metro";
-    public static final String PLANE =     "plane";
+    public static final String SIT = "sit";
+    public static final String WALK = "walking";
+    public static final String JOGGING = "jogging";
+    public static final String RUN = "running";
+    public static final String BIKE = "biking";
+    public static final String CAR = "car";
+    public static final String MOTO = "moto";
+    public static final String METRO = "metro";
+    public static final String PLANE = "plane";
 
     private static final String[] ORDER = new String[]{SIT, WALK, JOGGING, RUN, BIKE, METRO, CAR, MOTO, PLANE};
 
@@ -134,15 +137,15 @@ public class MotionService extends Service implements SensorEventListener {
         mAccelCurrent = SensorManager.GRAVITY_EARTH;
         mAccelLast = SensorManager.GRAVITY_EARTH;
 
-        SIT_PROPERTIES =        new Properties(0,       0.5f,       1,  2,  1.4f);
-        WALK_PROPERTIES =       new Properties(0.5001f, 4.99f,      3,  4,  1.4f);
-        JOGGING_PROPERTIES =    new Properties(5,       9.99f,      5,  6,  1.85f);
-        RUN_PROPERTIES =        new Properties(10,      19.99f,     7,  8,  3.47f);
-        BIKE_PROPERTIES =       new Properties(10,      29.99f,     8,  9,  2.7f);
-        CAR_PROPERTIES =        new Properties(10,      249.99f,    9,  15,  2);
-        MOTO_PROPERTIES =       new Properties(10,      249.99f,    18, 23,  1.4f);
-        METRO_PROPERTIES =      new Properties(10,      50,         2,  4,  1.4f);
-        PLANE_PROPERTIES =      new Properties(150,     1200,       60, 70,  1.4f);
+        SIT_PROPERTIES = new Properties(0, 0.5f, 1, 2, 1.4f);
+        WALK_PROPERTIES = new Properties(0.5001f, 4.99f, 3, 4, 1.4f);
+        JOGGING_PROPERTIES = new Properties(5, 9.99f, 5, 6, 1.85f);
+        RUN_PROPERTIES = new Properties(10, 19.99f, 7, 8, 3.47f);
+        BIKE_PROPERTIES = new Properties(10, 29.99f, 8, 9, 2.7f);
+        CAR_PROPERTIES = new Properties(10, 249.99f, 9, 15, 2);
+        MOTO_PROPERTIES = new Properties(10, 249.99f, 18, 23, 1.4f);
+        METRO_PROPERTIES = new Properties(10, 50, 2, 4, 1.4f);
+        PLANE_PROPERTIES = new Properties(150, 1200, 60, 70, 1.4f);
     }
 
     @Override
@@ -173,7 +176,7 @@ public class MotionService extends Service implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER){
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
             mGravity = event.values.clone();
 
             float x = mGravity[0];
@@ -184,11 +187,13 @@ public class MotionService extends Service implements SensorEventListener {
             float delta = mAccelCurrent - mAccelLast;
             mAccel = mAccel * 0.9f + delta;
 
-            DecimalFormat decimalFormat = new DecimalFormat("#.#");
+            DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
+            symbols.setDecimalSeparator('.');
+            DecimalFormat decimalFormat = new DecimalFormat("#.###", symbols);
             float twoDigitsF = Float.valueOf(decimalFormat.format(mAccel));
 
             checkAcceleration(twoDigitsF);
-            if (!deviceIsMoving && twoDigitsF > 1){
+            if (!deviceIsMoving && twoDigitsF > 1) {
                 startService();
                 deviceIsMoving = true;
                 Handler handler = new Handler();
@@ -218,10 +223,11 @@ public class MotionService extends Service implements SensorEventListener {
 
     public void startService() {
         if (!initialized) {
-            initialized = true;
-            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
+
+            initialized = true;
 
             locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
             locationManager.requestLocationUpdates(getProviderName(), minTime, minDistance, locationListener);
