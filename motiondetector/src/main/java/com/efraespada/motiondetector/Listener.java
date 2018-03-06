@@ -9,7 +9,8 @@ import android.location.Location;
 public interface Listener {
 
     void locationChanged(Location location);
+    void accelerationChanged(float acceleration);
     void step();
-    void car();
+    void type(String type);
 
 }
