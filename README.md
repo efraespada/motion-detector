@@ -66,3 +66,10 @@ protected void onDestroy() {
     super.onDestroy();
 }
 ```
+
+```xml
+<service
+    android:name="com.efraespada.motiondetector.MotionService"
+    android:enabled="true"
+    android:exported="false" />
+```

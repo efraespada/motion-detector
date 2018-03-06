@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.0"
+    compileSdkVersion 27
+    buildToolsVersion "26.0.3"
     defaultConfig {
         applicationId "com.efraespada.sample.motiondetector"
         minSdkVersion 14
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -25,13 +25,13 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
+    compile 'com.android.support:appcompat-v7:27.1.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile project(':motiondetector')
-    compile "com.mikepenz:iconics-core:2.9.0@aar"
-    compile "com.mikepenz:iconics-views:2.9.0@aar"
+    compile "com.mikepenz:iconics-core:3.0.3@aar"
+    compile "com.mikepenz:iconics-views:3.0.3@aar"
     compile 'com.mikepenz:google-material-typeface:3.0.1.1.original@aar'
     compile 'com.mikepenz:material-design-iconic-typeface:2.2.0.3@aar'
-    compile 'com.mikepenz:community-material-typeface:1.9.32.2@aar'
+    compile 'com.mikepenz:community-material-typeface:2.0.46.1@aar'
     testCompile 'junit:junit:4.12'
 }

@@ -149,7 +149,7 @@ public class MotionService extends Service implements SensorEventListener {
     public int onStartCommand(Intent intent, int flags, int startId) {
         sensorMan.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI);
         startService();
-        return START_NOT_STICKY;
+        return START_STICKY;
     }
 
     @Override
