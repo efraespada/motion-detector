@@ -436,6 +436,14 @@ public class MotionService extends Service implements SensorEventListener {
         return currentType;
     }
 
+    public static float getMinAccuracy() {
+        return MIN_ACCURACY;
+    }
+
+    public static void setMinAccuracy(float minAccuracy) {
+        MIN_ACCURACY = minAccuracy;
+    }
+
     class Properties {
 
         private float maxSpeed;

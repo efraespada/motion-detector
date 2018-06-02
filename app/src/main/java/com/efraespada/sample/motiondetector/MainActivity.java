@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         stepsReset.setOnClickListener(this);
 
         MotionDetector.initialize(this);
+        MotionDetector.minAccuracy(30);
         MotionDetector.debug(true);
 
         MotionDetector.start(new Listener() {

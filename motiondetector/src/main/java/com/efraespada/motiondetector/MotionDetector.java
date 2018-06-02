@@ -18,6 +18,7 @@ public class MotionDetector {
     private static MotionService motionService;
     private static Boolean isServiceBound;
     private static Boolean debug;
+    private static float minAccuracy = 10f;
 
     private static final String TAG = MotionDetector.class.getSimpleName();
 
@@ -33,6 +34,10 @@ public class MotionDetector {
 
     public static void debug(boolean debug) {
         MotionDetector.debug = debug;
+    }
+
+    public static void minAccuracy(float minAccuracy) {
+        MotionDetector.minAccuracy = minAccuracy;
     }
 
     public static void end() {
@@ -53,6 +58,7 @@ public class MotionDetector {
             Intent i = new Intent(context, MotionService.class);
             context.startService(i);
             MotionService motionService = new MotionService();
+            motionService.setMinAccuracy(minAccuracy);
             motionService.setListener(context, listener, debug);
             context.bindService(i, getServiceConnection(motionService), Context.BIND_AUTO_CREATE);
             isServiceBound = true;
