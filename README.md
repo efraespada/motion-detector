@@ -2,7 +2,7 @@
 
 Gradle:
 ```groovy
-implementation 'com.efraespada:motiondetector:0.0.2'
+implementation 'com.efraespada:motiondetector:0.0.3'
 ```
 Manifest:
 ```xml
@@ -21,7 +21,12 @@ Manifest:
 Initialize:
 ```java
 MotionDetector.initialize(getApplicationContext());
+
+// debug logs
 MotionDetector.debug(true);
+
+// 10 meters accuracy
+MotionDetector.minAccuracy(10);
 ```
 
 ```java
