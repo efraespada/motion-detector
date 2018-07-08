@@ -17,15 +17,15 @@ import com.mikepenz.iconics.context.IconicsLayoutInflater;
 import com.mikepenz.iconics.view.IconicsTextView;
 import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic;
 
-import static com.efraespada.motiondetector.MotionService.BIKE;
-import static com.efraespada.motiondetector.MotionService.CAR;
-import static com.efraespada.motiondetector.MotionService.JOGGING;
-import static com.efraespada.motiondetector.MotionService.METRO;
-import static com.efraespada.motiondetector.MotionService.MOTO;
-import static com.efraespada.motiondetector.MotionService.PLANE;
-import static com.efraespada.motiondetector.MotionService.RUN;
-import static com.efraespada.motiondetector.MotionService.SIT;
-import static com.efraespada.motiondetector.MotionService.WALK;
+import static com.efraespada.motiondetector.MotionJob.BIKE;
+import static com.efraespada.motiondetector.MotionJob.CAR;
+import static com.efraespada.motiondetector.MotionJob.JOGGING;
+import static com.efraespada.motiondetector.MotionJob.METRO;
+import static com.efraespada.motiondetector.MotionJob.MOTO;
+import static com.efraespada.motiondetector.MotionJob.PLANE;
+import static com.efraespada.motiondetector.MotionJob.RUN;
+import static com.efraespada.motiondetector.MotionJob.SIT;
+import static com.efraespada.motiondetector.MotionJob.WALK;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -106,7 +106,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             @Override
-            public void step() {
+            public void locatedStep() {
+                count++;
+                steps.setText(String.valueOf(count));
+            }
+
+            @Override
+            public void notLocatedStep() {
                 count++;
                 steps.setText(String.valueOf(count));
             }
