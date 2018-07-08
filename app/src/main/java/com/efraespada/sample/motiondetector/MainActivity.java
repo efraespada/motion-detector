@@ -106,7 +106,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             @Override
-            public void step() {
+            public void locatedStep() {
+                count++;
+                steps.setText(String.valueOf(count));
+            }
+
+            @Override
+            public void notLocatedStep() {
                 count++;
                 steps.setText(String.valueOf(count));
             }

@@ -2,7 +2,7 @@
 
 Gradle:
 ```groovy
-implementation 'com.efraespada:motiondetector:0.0.3'
+implementation 'com.efraespada:motiondetector:0.0.4'
 ```
 Manifest:
 ```xml
@@ -12,9 +12,9 @@ Manifest:
 <application>
  
     <service
-        android:name="com.efraespada.motiondetector.MotionService"
-        android:enabled="true"
-        android:exported="false" />
+        android:name="com.efraespada.motiondetector.MotionJob"
+        android:permission="android.permission.BIND_JOB_SERVICE"
+        android:exported="true"/>
         
 </application>
 ```
@@ -48,8 +48,16 @@ MotionDetector.start(new Listener() {
     * step detected
     */
     @Override
-    public void step() {
-        
+    public void locatedStep() {
+
+    }
+
+    /**
+    * step detected
+    */
+    @Override
+    public void notLocatedStep() {
+
     }
     
     /**
