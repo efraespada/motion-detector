@@ -2,7 +2,7 @@
 
 Gradle:
 ```groovy
-implementation 'com.efraespada:motiondetector:0.0.4'
+implementation 'com.efraespada:motiondetector:0.0.5'
 ```
 Manifest:
 ```xml

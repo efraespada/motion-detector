@@ -24,7 +24,7 @@ import java.util.Locale;
 
 public class MotionJob extends JobService implements SensorEventListener {
 
-    private static final String TAG = MotionService.class.getSimpleName();
+    private static final String TAG = MotionJob.class.getSimpleName();
 
     public static final String SIT = "sit";
     public static final String WALK = "walking";
