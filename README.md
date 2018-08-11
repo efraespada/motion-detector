@@ -1,6 +1,6 @@
 # motion-detector
 
-Motion detection utility that work with (Rotor)[https://github.com/rotorlab/core-kotlin] JobService.
+Motion detection utility that work with [Rotor](https://github.com/rotorlab/core-kotlin) JobService.
 Gradle:
 ```groovy
 implementation 'com.efraespada:motiondetector:0.0.6'
