@@ -39,7 +39,8 @@ public class MotionDetector {
     public static float mAccel;
     public static float mAccelCurrent;
     public static float mAccelLast;
-    public static Boolean deviceIsMoving = false;
+    public static boolean deviceIsMoving;
+    public static boolean mustBeMoving;
     public static long minTime = 30 * 1000;                   // 5 seconds
     public static long minDistance = 3;                       // 3 meters
     public static final int SERVICE_LIVE = 30 * 60 * 1000;    // 30 min
@@ -63,12 +64,8 @@ public class MotionDetector {
         MotionDetector.serviceComponent = new ComponentName(context, MotionJob.class);
     }
 
-    public static void debug(boolean debug) {
+    public static void setDebug(boolean debug) {
         MotionDetector.debug = debug;
-    }
-
-    public static void minAccuracy(float minAccuracy) {
-        MotionDetector.minAccuracy = minAccuracy;
     }
 
     public static void end() {
@@ -97,7 +94,10 @@ public class MotionDetector {
 
             @Override
             public void onLocationChanged(Location location) {
-                if (MotionDetector.deviceIsMoving && location.getAccuracy() <= MotionDetector.MIN_ACCURACY) {
+                if (MotionDetector.mustBeMoving && MotionDetector.deviceIsMoving && location.getAccuracy() <= MotionDetector.MIN_ACCURACY) {
+                    currentLocation = location;
+                    MotionDetector.listener.locationChanged(location);
+                } else if (!MotionDetector.mustBeMoving && location.getAccuracy() <= MotionDetector.MIN_ACCURACY) {
                     currentLocation = location;
                     MotionDetector.listener.locationChanged(location);
                 }
@@ -152,6 +152,10 @@ public class MotionDetector {
 
     public static void setMinAccuracy(float minAccuracy) {
         MotionDetector.MIN_ACCURACY = minAccuracy;
+    }
+
+    public static void deviceMustBeMoving(boolean mustBeMoving) {
+        MotionDetector.mustBeMoving = mustBeMoving;
     }
 
 }

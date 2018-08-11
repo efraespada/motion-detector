@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private IconicsTextView type;
     private TextView steps;
     private ImageButton stepsReset;
+    private TextView location;
 
     private static Integer count;
     private static String currentType;
@@ -53,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        Toolbar myToolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
         if (count == null) {
@@ -83,9 +84,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         stepsReset = (ImageButton) findViewById(R.id.steps_reset);
         stepsReset.setOnClickListener(this);
 
+        location = (TextView) findViewById(R.id.location);
+
+
         MotionDetector.initialize(this);
-        MotionDetector.minAccuracy(30);
-        MotionDetector.debug(true);
+        MotionDetector.setMinAccuracy(30);
+        MotionDetector.setDebug(true);
+        MotionDetector.deviceMustBeMoving(false);
 
         MotionDetector.start(new Listener() {
 
@@ -93,6 +98,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void locationChanged(Location location) {
                 lastSpeed = location.getSpeed() * 3.6F;
                 speed.setText(String.valueOf(lastSpeed) + kmh);
+                MainActivity.this.location.setText(location.getLatitude() + ", " + location.getLongitude());
             }
 
             @Override

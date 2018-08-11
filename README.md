@@ -1,8 +1,9 @@
 # motion-detector
 
+Motion detection utility that work with [Rotor](https://github.com/rotorlab/core-kotlin) JobService.
 Gradle:
 ```groovy
-implementation 'com.efraespada:motiondetector:0.0.5'
+implementation 'com.efraespada:motiondetector:0.0.6'
 ```
 Manifest:
 ```xml
@@ -10,12 +11,7 @@ Manifest:
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
  
 <application>
- 
-    <service
-        android:name="com.efraespada.motiondetector.MotionJob"
-        android:permission="android.permission.BIND_JOB_SERVICE"
-        android:exported="true"/>
-        
+
 </application>
 ```
 Initialize:
@@ -27,6 +23,9 @@ MotionDetector.debug(true);
 
 // 10 meters accuracy
 MotionDetector.minAccuracy(10);
+
+// notify location changes when device is moving
+MotionDetector.deviceMustBeMoving(true);
 ```
 
 ```java
